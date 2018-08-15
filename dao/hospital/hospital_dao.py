@@ -42,8 +42,10 @@ class HospitalDao(BaseDao):
                            )
         except Exception, ex:
             logging.error(ex, exc_info=1)
-            print item
+            # print item
             raise ex
 
         sql = sql[:-1]  # 去掉最后的,
+
+        sql += " on duplicate key update del_flag=0"
         doctor_conn.execute_sql(sql)

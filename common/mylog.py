@@ -1,8 +1,4 @@
 # coding=utf-8
-import logging
-import os
-
-from logging.config import fileConfig
 
 # # 导入配置
 # cur_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))

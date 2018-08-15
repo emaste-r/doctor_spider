@@ -1,12 +1,13 @@
 # coding: utf8
+import logging
+
 import MySQLdb
 import MySQLdb.cursors
-import logging
 
 from common import config
 from common import constant
-from common import mylog
 from myutil import config_tool
+
 
 # logging = mylog.logging
 
@@ -53,7 +54,7 @@ class DBConnection(object):
         if self.conn_write is not None:
             self.conn_write.close()
             self.conn_write = None
-        logging.error("delete db conn end")
+        print "delete db conn end.."
 
     def reconnect_db(self, _type):
         """

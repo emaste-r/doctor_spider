@@ -90,9 +90,6 @@ class HospitalSpiderPipeline(object):
     def close_spider(self, spider):
         print "len(self.hospital_list)=%s" % len(self.hospital_list)
 
-        # 排好序
-        self.hospital_list.sort(key=lambda x: x["number"])
-
         print "call insert..."
         HospitalDao.insert(self.hospital_list)
         print "call end..."

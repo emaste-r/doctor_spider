@@ -1,12 +1,11 @@
 # coding=utf-8
 import ConfigParser
-import os
-
 import logging
+import os
 
 from common import config
 from common import constant
-from common import mylog
+
 
 # logging = mylog.logging
 
