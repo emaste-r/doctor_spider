@@ -16,6 +16,12 @@ class HospitalDao(BaseDao):
         :return:
         """
 
+        if len(hospital_list) == 0:
+            logging.error("######## nothing to be inserted...")
+            logging.error("######## nothing to be inserted...")
+            logging.error("######## nothing to be inserted...")
+            return
+
         sql = "insert into {db}.{tbl}(`name`, `number`, grade, category, is_public, is_appoint, address, " \
               "img_url, section_cnt, doctor_cnt, comment_cnt, like_cnt, good_at, csr) values ".format(db=cls.db_name,
                                                                                                       tbl=cls.table_name)

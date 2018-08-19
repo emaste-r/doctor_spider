@@ -3,7 +3,7 @@
 from scrapy.linkextractor import LinkExtractor
 from scrapy.spider import CrawlSpider, Rule, logging
 
-from doctor_spider.items import DoctorSpiderItem
+from doctor_spider.items.hospital_item import HospitalItem
 
 
 class HospitalSpider(CrawlSpider):
@@ -24,7 +24,7 @@ class HospitalSpider(CrawlSpider):
     # 配置管道文件
     custom_settings = {
         "ITEM_PIPELINES": {
-            'doctor_spider.pipelines.HospitalSpiderPipeline': 300,
+            'doctor_spider.pipelines.hospital_pipelines.HospitalPipeline': 300,
         }
     }
 
@@ -36,19 +36,19 @@ class HospitalSpider(CrawlSpider):
         """
         print response.url
         for element in response.xpath('//ul[@class="H_main"]/li[@class="H_list"]'):
-            item = DoctorSpiderItem()
+            item = HospitalItem()
 
             try:
                 item['name'] = element.xpath('div[1]/h3/a/text()').extract()[0]
                 item['img_url'] = element.xpath('a/img/@src').extract()[0]
                 item['number'] = element.xpath('a/div/text()').extract()[0]
                 item['section_cnt'] = \
-                element.xpath('div[1]/dl[@class="H_list_center_add"]/dd[1]/span/text()').extract()[0]
+                    element.xpath('div[1]/dl[@class="H_list_center_add"]/dd[1]/span/text()').extract()[0]
                 item['doctor_cnt'] = element.xpath('div[1]/dl[@class="H_list_center_add"]/dd[1]/span/text()').extract()[
                     1]
                 try:
                     item['comment_cnt'] = \
-                    element.xpath('div[1]/dl[@class="H_list_center_add"]/dd[1]/span/text()').extract()[2]
+                        element.xpath('div[1]/dl[@class="H_list_center_add"]/dd[1]/span/text()').extract()[2]
                 except Exception, ex:
                     # 某些医院如：http://www.mingyihui.net/8_hospitallist.html 没有评论数
                     logging.error("无患者评论数:%s" % ex)

@@ -8,8 +8,8 @@
 import scrapy
 
 
-class DoctorSpiderItem(scrapy.Item):
-    name = scrapy.Field()  # 医院名字
+class DoctorItem(scrapy.Item):
+    name = scrapy.Field()  # 医生名字
     img_url = scrapy.Field()  # 医院图片
     number = scrapy.Field()  # 排行
     section_cnt = scrapy.Field()  # 科室数量

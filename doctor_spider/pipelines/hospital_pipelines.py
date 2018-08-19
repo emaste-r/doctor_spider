@@ -9,7 +9,7 @@ import logging
 from dao.hospital.hospital_dao import HospitalDao
 
 
-class HospitalSpiderPipeline(object):
+class HospitalPipeline(object):
     def __init__(self):
         self.hospital_list = []
 
