@@ -1,4 +1,6 @@
 # coding=utf-8
+import json
+
 from common.constant import *
 
 run_venv = 1
@@ -10,3 +12,5 @@ else:
 
 DOC_DIR = "docs/"
 DOC_TEMPLATE_DIR = "doc_templates/"
+
+city_json = json.load(open("support/docs/city.json"))
