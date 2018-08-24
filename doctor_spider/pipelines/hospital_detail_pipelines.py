@@ -31,15 +31,27 @@ class HospitalDetailPipeline(object):
         if not isinstance(item['city'], int):
             item['city'] = -1
 
-        self.hospital_list.append(item)
+        # 直接插入
+        if HospitalDetailDao.get_by_index(item["index"]):
+            print "index=%s, exist, pass..." % item["index"]
+        else:
+            HospitalDetailDao.insert(item)
+
+        # self.hospital_list.append(item)
         return item
 
     def close_spider(self, spider):
         print "len(self.hospital_list)=%s" % len(self.hospital_list)
+        #
+        # # 尽可能按照index排序
+        # self.hospital_list.sort(key=lambda x: x["index"])
+        #
+        # print "call insert..."
+        # for item in self.hospital_list:
+        #     if HospitalDetailDao.get_by_index(item["index"]):
+        #         print "index=%s, exist, pass..." % item["index"]
+        #     else:
+        #         HospitalDetailDao.insert(item)
 
-        # 尽可能按照index排序
-        self.hospital_list.sort(key=lambda x: x["index"])
-
-        print "call insert..."
-        HospitalDetailDao.insert(self.hospital_list)
+        # HospitalDetailDao.insert_list(self.hospital_list)
         print "call end..."

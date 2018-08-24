@@ -15,12 +15,39 @@ class HospitalDetailDao(BaseDao):
     table_name = "hospital_detail"
 
     @classmethod
-    def insert(cls, hospital_list):
-        """
-        获取全部分类列表
-        :return:
-        """
+    def get_by_index(cls, index):
+        sql = "select * from {db}.{tbl} where `index`={index}".format(db=cls.db_name,
+                                                                      tbl=cls.table_name,
+                                                                      index=index)
+        item = doctor_conn.fetchone(sql)
+        return item
 
+    @classmethod
+    def get_all_indexs(cls):
+        sql = "select `index` from {db}.{tbl} ".format(db=cls.db_name, tbl=cls.table_name)
+        items = doctor_conn.fetchall(sql)
+        return items
+
+    @classmethod
+    def insert(cls, hospital_item):
+        sql = "insert into {db}.{tbl}(`name`, `index`, img_url, section_cnt, doctor_cnt, comment_cnt, province, city) " \
+              "values  ('{name}', {index}, '{img_url}', {section_cnt}, {doctor_cnt}, {comment_cnt}, '{province}', " \
+              "'{city}') on duplicate key update img_url='{img_url}', section_cnt={section_cnt}," \
+              "comment_cnt={comment_cnt}, doctor_cnt={doctor_cnt},province={province}, city={city} ".format(
+            db=cls.db_name,
+            tbl=cls.table_name, name=hospital_item["name"].encode("utf-8"),
+            index=hospital_item["index"] if "index" in hospital_item else 0,
+            section_cnt=hospital_item["section_cnt"] if "section_cnt" in hospital_item else 0,
+            doctor_cnt=hospital_item["doctor_cnt"] if "doctor_cnt" in hospital_item else 0,
+            comment_cnt=hospital_item["comment_cnt"] if "comment_cnt" in hospital_item else 0,
+            province=hospital_item["province"] if "province" in hospital_item else 0,
+            city=hospital_item["city"] if "city" in hospital_item else 0,
+            img_url=hospital_item["img_url"].encode("utf-8")
+        )
+        doctor_conn.execute_sql(sql)
+
+    @classmethod
+    def insert_list(cls, hospital_list):
         if len(hospital_list) == 0:
             logging.error("######## nothing to be inserted...")
             return

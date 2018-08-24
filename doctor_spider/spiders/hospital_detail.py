@@ -1,9 +1,11 @@
 # coding=utf-8
 import re
+import time
 
 from scrapy.linkextractor import LinkExtractor
 from scrapy.spider import CrawlSpider, Rule
 
+from dao.hospital.hospital_detail_dao import HospitalDetailDao
 from doctor_spider.items.hospital_detail_item import HospitalDetailItem
 
 
@@ -11,12 +13,20 @@ class HospitalSpider(CrawlSpider):
     # spider的唯一名称
     name = 'hospital_detail'
 
+    # 拒绝爬的网址
+    not_allow_urls = []
+    for index_item in HospitalDetailDao.get_all_indexs():
+        not_allow_urls.append("http://www.mingyihui.net/hospital_%s.html" % index_item["index"])
+
     # 开始爬取的url
-    for i in range(1, 2):
-        start_urls = ["http://www.mingyihui.net/hospital_%s.html" % i]
+    start_urls = []
+    for i in range(7000, 7010):
+        start_urls.append("http://www.mingyihui.net/hospital_%s.html" % i)
 
     # 从页面需要提取的url 链接(link)
-    links = LinkExtractor(allow=["http://www.mingyihui.net/hospital_\d+.html"])
+    links = LinkExtractor(allow_domains=("www.mingyihui.net"),
+                          allow=("http://www.mingyihui.net/hospital_\d+.html",),
+                          deny=tuple(not_allow_urls))
 
     # 设置解析link的规则，callback是指解析link返回的响应数据的的方法
     rules = [Rule(link_extractor=links, callback="parse_content", follow=False)]
@@ -25,6 +35,10 @@ class HospitalSpider(CrawlSpider):
     custom_settings = {
         "ITEM_PIPELINES": {
             'doctor_spider.pipelines.hospital_detail_pipelines.HospitalDetailPipeline': 300,
+        },
+        "DOWNLOADER_MIDDLEWARES": {
+            'doctor_spider.middlewares.ProxyMiddleware': 503,
+            'doctor_spider.middlewares.RandomUserAgent': 502,
         }
     }
 
@@ -37,6 +51,11 @@ class HospitalSpider(CrawlSpider):
         print response.url
         item = HospitalDetailItem()
         item['index'] = re.findall(r'\d+', response.url)[0]
+
+        if HospitalDetailDao.get_by_index(item['index']):
+            print "######### pass ##########  in db... %s" % response.url
+            return
+
         item['name'] = response.xpath('/html/body/div[7]/div[1]/h1/text()').extract()[0]
         item['province'] = response.xpath('/html/body/div[6]/a[2]/text()').extract()[0]
         item['city'] = response.xpath('/html/body/div[6]/a[3]/text()').extract()[0]
@@ -57,4 +76,5 @@ class HospitalSpider(CrawlSpider):
             print ex
             item['comment_cnt'] = 0
 
+        time.sleep(0.5)
         yield item

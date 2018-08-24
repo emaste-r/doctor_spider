@@ -190,7 +190,7 @@ class DBConnection(object):
 
     def execute_sql(self, sql):
         """
-        执行一条sql： insert、update、delete
+        执行一条sql： insert_list、update、delete
         :param sql:
         :return:
         """
@@ -213,7 +213,7 @@ class DBConnection(object):
 
                 if 'update' in sql or 'delete' in sql:  # 如果是单条update，则获取影响的行数
                     result = cursor.rowcount
-                elif "insert" in sql:  # 否则，获取最后一次插入的id
+                elif "insert_list" in sql:  # 否则，获取最后一次插入的id
                     sql_last_id = "select last_insert_id() as id"
                     cursor.execute(sql_last_id)
                     last_id_result = cursor.fetchall()
