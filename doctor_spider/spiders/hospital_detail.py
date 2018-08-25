@@ -17,10 +17,11 @@ class HospitalSpider(CrawlSpider):
     not_allow_urls = []
     for index_item in HospitalDetailDao.get_all_indexs():
         not_allow_urls.append("http://www.mingyihui.net/hospital_%s.html" % index_item["index"])
+    print "not_allow_urls len=%s" %len(not_allow_urls)
 
     # 开始爬取的url
     start_urls = []
-    for i in range(7000, 7010):
+    for i in range(6000, 10000):
         start_urls.append("http://www.mingyihui.net/hospital_%s.html" % i)
 
     # 从页面需要提取的url 链接(link)
@@ -37,7 +38,7 @@ class HospitalSpider(CrawlSpider):
             'doctor_spider.pipelines.hospital_detail_pipelines.HospitalDetailPipeline': 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
-            'doctor_spider.middlewares.ProxyMiddleware': 503,
+            #'doctor_spider.middlewares.ProxyMiddleware': 503,
             'doctor_spider.middlewares.RandomUserAgent': 502,
         }
     }

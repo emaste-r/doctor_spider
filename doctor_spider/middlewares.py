@@ -131,19 +131,11 @@ USER_AGENT_LIST = USER_AGENT_LIST = [
 
 PROXIES = [
     "http://61.135.217.7:80",
-    "http://118.190.95.35:9001",
     "http://118.190.95.43:9001",
     "http://119.3.20.128:80",
     "http://116.62.134.173:9999",
     "http://124.42.68.152:90",
     "http://171.113.157.233:8010",
-    "http://171.113.157.233:8010",
-    "http://171.113.157.233:8010",
-    "http://171.113.157.233:8010",
-    "http://171.113.157.233:8010",
-    "http://171.113.157.233:8010",
-    "http://171.113.157.233:8010",
-
 ]
 
 
@@ -152,10 +144,11 @@ class RandomUserAgent(UserAgentMiddleware):
         ua = random.choice(USER_AGENT_LIST)
         print "####### RandomUserAgent: %s" % ua
         request.headers.setdefault('User-Agent', ua)
+        request.headers.setdefault('Upgrade-Insecure-Requests', 1)
 
 
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
         proxy = random.choice(PROXIES)
-        print "######## ProxyMiddleware： %s" % proxy
+        print "######## ProxyMiddleware: %s" % proxy
         request.meta["proxy"] = proxy
