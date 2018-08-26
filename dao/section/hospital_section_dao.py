@@ -24,7 +24,7 @@ class HospitalSectionDao(BaseDao):
 
     @classmethod
     def get_all_sections_which_need_to_deal_doctor(cls):
-        sql = "select * from {db}.{tbl} where deal_doctor_flag=0 limit 10000, 10000".format(db=cls.db_name,
+        sql = "select * from {db}.{tbl} where deal_doctor_flag=0 limit 60000, 30000".format(db=cls.db_name,
                                                                          tbl=cls.table_name)
         print sql
         items = doctor_conn.fetchall(sql)
