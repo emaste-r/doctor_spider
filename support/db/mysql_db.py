@@ -220,8 +220,8 @@ class DBConnection(object):
                     if len(last_id_result) > 0:
                         result = last_id_result[0]['id']
         except Exception, ex:
-            logging.error("sql=%s" % sql)
-            logging.error("[db_source_write:%s] exectue error: %s !" % (self.db_source_write, ex), exc_info=1)
+            #logging.error("sql=%s" % sql)
+            #logging.error("[db_source_write:%s] exectue error: %s !" % (self.db_source_write, ex), exc_info=1)
             raise
         finally:
             if cursor is not None:

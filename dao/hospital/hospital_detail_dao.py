@@ -16,7 +16,7 @@ class HospitalDetailDao(BaseDao):
 
     @classmethod
     def get_by_index(cls, index):
-        sql = "select `index` from {db}.{tbl} where `index`={index}".format(db=cls.db_name,
+        sql = "select `index`, province, city, area from {db}.{tbl} where `index`={index}".format(db=cls.db_name,
                                                                             tbl=cls.table_name,
                                                                             index=index)
         item = doctor_conn.fetchone(sql)
@@ -40,8 +40,8 @@ class HospitalDetailDao(BaseDao):
 
     @classmethod
     def get_all_indexs_which_need_to_deal_section(cls):
-        sql = "select `index` from {db}.{tbl} where deal_section_flag=0".format(db=cls.db_name,
-                                                                                tbl=cls.table_name)
+        sql = "select `index` from {db}.{tbl} where deal_section_flag=-1".format(db=cls.db_name,
+                                                                                 tbl=cls.table_name)
         print sql
         items = doctor_conn.fetchall(sql)
         return items
